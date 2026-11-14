@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OM FF PRO</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #080d18;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 15px;
+}
+
+h1 {
+  color: #ff9200;
+  text-shadow: 0 0 15px #ff9200;
+  font-size: 36px;
+}
+
+.subtitle {
+  color: #00aaff;
+}
+
+.box {
+  background: #111d30;
+  border: 1px solid #087cff;
+  box-shadow: 0 0 12px #087cff55;
+  border-radius: 16px;
+  padding: 20px;
+  margin: 18px 0;
+}
+
+h2 {
+  color: #00aaff;
+}
+
+h3 {
+  color: #ff9200;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: #ff9200;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 13px;
+  border-radius: 9px;
+  border: 1px solid #00aaff;
+  background: #080d18;
+  color: white;
+  margin: 10px 0;
+}
+
+.value {
+  color: #00aaff;
+  font-size: 22px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  margin: 7px 0;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg,#008cff,#ff9200);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+button:active {
+  opacity: 0.7;
+}
+
+.guide {
+  text-align: left;
+  line-height: 1.8;
+}
+
+footer {
+  color: #ff9200;
+  padding: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🔥 OM FF PRO 🔥</h1>
+<p class="subtitle">LEGIT GAMING DASHBOARD</p>
+
+<div class="box">
+<h2>👤 PLAYER PROFILE</h2>
+
+<input id="playerName" type="text"
+placeholder="Enter Player Name">
+
+<button onclick="saveProfile()">
+SAVE PROFILE
+</button>
+
+<p id="profileStatus">Welcome to OM FF!</p>
+</div>
+
+<div class="box">
+<h2>🎯 SENSITIVITY SETTINGS</h2>
+
+<div id="settings"></div>
+
+<button onclick="saveSettings()">
+💾 SAVE SETTINGS
+</button>
+
+<button onclick="resetSettings()">
+🔄 RESET SETTINGS
+</button>
+
+<p id="status"></p>
+</div>
+
+<div class="box guide">
+<h2>🎯 HEADSHOT PRACTICE GUIDE</h2>
+
+<h3>1. Training Ground</h3>
+<p>Practice your aim regularly in Training Ground.</p>
+
+<h3>2. Crosshair Placement</h3>
+<p>Keep your crosshair positioned carefully while aiming.</p>
+
+<h3>3. Drag Practice</h3>
+<p>Practice controlled upward swipes with different weapons.</p>
+
+<h3>4. Sensitivity</h3>
+<p>Try small sensitivity adjustments and find comfortable settings.</p>
+
+<h3>5. Regular Practice</h3>
+<p>Practice patiently and focus on accuracy.</p>
+</div>
+
+<footer>
+🔥 MADE BY OM ❤️
+</footer>
+
+<script>
+
+const items = [
+ ["General Sensitivity",100],
+ ["Red Dot",90],
+ ["2X Scope",85],
+ ["4X Scope",80],
+ ["Sniper Scope",70],
+ ["Free Look",100]
+];
+
+const settings = document.getElementById("settings");
+
+items.forEach((item,i) => {
+ const heading = document.createElement("h3");
+ heading.textContent = item[0];
+
+ const slider = document.createElement("input");
+ slider.type = "range";
+ slider.min = 0;
+ slider.max = 200;
+ slider.value = item[1];
+ slider.id = "s"+i;
+
+ const value = document.createElement("p");
+ value.className = "value";
+ value.id = "v"+i;
+ value.textContent = item[1];
+
+ slider.addEventListener("input", () => {
+  value.textContent = slider.value;
+ });
+
+ settings.append(heading,slider,value);
+});
+
+function saveSettings() {
+ const data = items.map((item,i) =>
+  document.getElementById("s"+i).value
+ );
+
+ localStorage.setItem("omFFSettings",JSON.stringify(data));
+
+ document.getElementById("status").textContent =
+ "✅ SETTINGS SAVED!";
+}
+
+function resetSettings() {
+ items.forEach((item,i) => {
+  document.getElementById("s"+i).value = item[1];
+  document.getElementById("v"+i).textContent = item[1];
+ });
+
+ localStorage.removeItem("omFFSettings");
+
+ document.getElementById("status").textContent =
+ "🔄 SETTINGS RESET!";
+}
+
+function saveProfile() {
+ const name = document.getElementById("playerName").value.trim();
+
+ if(!name) {
+  document.getElementById("profileStatus").textContent =
+  "Please enter player name!";
+  return;
+ }
+
+ localStorage.setItem("omFFPlayer",name);
+
+ document.getElementById("profileStatus").textContent =
+ "Welcome, " + name + "!";
+}
+
+const saved = JSON.parse(
+ localStorage.getItem("omFFSettings") || "null"
+);
+
+if(Array.isArray(saved) && saved.length === items.length) {
+ saved.forEach((value,i) => {
+  document.getElementById("s"+i).value = value;
+  document.getElementById("v"+i).textContent = value;
+ });
+}
+
+const oldName = localStorage.getItem("omFFPlayer");
+
+if(oldName) {
+ document.getElementById("playerName").value = oldName;
+ document.getElementById("profileStatus").textContent =
+ "Welcome, " + oldName + "!";
+}
+
+</script>
+</body>
+</html>
+
